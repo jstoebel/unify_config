@@ -1,0 +1,3 @@
+# example config file
+[defaults]
+hostfile = production
