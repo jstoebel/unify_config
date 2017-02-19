@@ -1,3 +1,4 @@
 - src: darthwade.wordpress
 - src: geerlingguy.nginx
 - src: bennojoy.mysql
+- src: geerlingguy.mysql
