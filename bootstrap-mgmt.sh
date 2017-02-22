@@ -7,8 +7,9 @@ apt-get update
 apt-get -y install ansible
 
 # copy examples into /home/vagrant (from inside the mgmt node)
-cp -a /vagrant/examples/* /home/vagrant
-chown -R vagrant:vagrant /home/vagrant
+# cp -a /vagrant/* /home/ubuntu
+# ln -s /vagrant ~
+# chown -R ubuntu:ubuntu /home/ubuntu
 
 # configure hosts file for our internal network defined by Vagrantfile
 cat >> /etc/hosts <<EOL

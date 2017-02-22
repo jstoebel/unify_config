@@ -1,20 +1,36 @@
 ---
 - hosts: all
   become: yes
+  vars_files:
+    - vars/main.yml
   vars:
     wp_version: 4.0
-    wp_install_dir: /var/sites/awesome_wordpress_site
-    wp_db_name: wp_db
-    wp_db_user: wp_user
-    wp_db_password: wp_pw
+    wp_install_dir: "{{wp['root_dir']}}"
+    wp_db_name: "{{wp['db']}}"
+    wp_db_user: "{{wp['user']}}"
+    wp_db_password: "{{wp['pw']}}"
     wp_db_host: localhost
 
     nginx_vhosts: []
 
-  roles:
-  # - darthwade.wordpress
-  # - geerlingguy.nginx
+    mysql_root_password: "{{mysql_root_pass}}"
+    mysql_databases:
+      - name: "{{wp['db']}}"
+      - name: "{{unify['db']}}"
+    mysql_users:
+      - name: "{{wp['user']}}"
+        host: "%"
+        password: "{{wp['pw']}}"
+        priv: "{{ wp['db'] + '.*:ALL'}}"
+      - name: "{{unify['user']}}"
+        host: "%"
+        password: "{{unify['pw']}}"
+        priv: "{{ unify['db'] + '.*:ALL'}}"
 
-  # tasks:
-  # - name: install mysql
-  #   action: apt name=mysql state=installed update_cache=yes
+  roles:
+  - geerlingguy.nginx
+  - geerlingguy.mysql
+  # - darthwade.wordpress # I take forever! uncomment me!
+
+  tasks:
+    - include: "tasks/php.yml"

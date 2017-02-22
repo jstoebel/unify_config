@@ -1,3 +1,5 @@
 ansible.cfg
 production
 /.vagrant
+/playbooks/*.retry
+*.retry
