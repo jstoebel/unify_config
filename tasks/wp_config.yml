@@ -1,0 +1,25 @@
+---
+- name: change owner of wp_dir
+  file:
+    path: "{{wp['root_dir']}}"
+    owner: "{{lookup('env','USER')}}"
+    group: "www-data"
+    state: directory
+    recurse: yes
+
+- name: change wp gid
+  command: find {{wp['root_dir']}} -type d -exec chmod g+s {} \;
+
+- name: group write access to the wp-content directory
+  command: chmod g+w /{{wp['root_dir']}}/wp-content
+
+- name: give the web server write access to themes and plugins
+  command: chmod -R g+w /{{wp['root_dir']}}/wp-content/{{item}}
+  with_items:
+    - themes
+    - plugins
+
+- name: set FS_METHOD
+  lineinfile:
+    dest: "/{{wp['root_dir']}}/wp-config.php"
+    line: "define('FS_METHOD', 'direct');"

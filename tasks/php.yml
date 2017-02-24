@@ -1,12 +1,21 @@
 ---
-- name: install php-fpm
-  apt: name=php-fpm state=installed update_cache=yes
 
-- name: install php-mysql
-  apt: name=php-mysql state=installed update_cache=yes
+- name: Install php packages
+  apt:
+    name: "{{item}}"
+    state: installed
+    update_cache: yes
 
-- name: "fix /etc/php/7.0/fpm/php.ini"
-  copy: src=files/fpm-php.ini dest=/etc/php/7.0/fpm/php.ini mode=644 owner=root group=root
+  with_items:
+    - php-fpm
+    - php-mysql
+    - php-curl
+    - php-gd
+    - php-mbstring
+    - php-mcrypt
+    - php-xml
+    - php-xmlrpc
 
-- name: restart php
-  systemd: name=php7.0-fpm state=restarted
+  notify:
+    - "copy php.ini"
+    - restart php

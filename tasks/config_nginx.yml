@@ -1,3 +1,13 @@
 ---
-# - name: install php-fpm
-#   apt: name=php-fpm state=installed update_cache=yes
+- name: copy nginx config
+
+  template:
+    src: templates/nginx_default.j2
+    dest: "/etc/nginx/sites-available/default"
+    mode: 644
+    owner: root
+    group: root
+
+  notify:
+    - ensure nginx config file is ok
+    - restart nginx

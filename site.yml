@@ -4,6 +4,7 @@
   vars_files:
     - vars/main.yml
   vars:
+
     wp_version: 4.0
     wp_install_dir: "{{wp['root_dir']}}"
     wp_db_name: "{{wp['db']}}"
@@ -28,9 +29,32 @@
         priv: "{{ unify['db'] + '.*:ALL'}}"
 
   roles:
-  - geerlingguy.nginx
-  - geerlingguy.mysql
-  # - darthwade.wordpress # I take forever! uncomment me!
+    - geerlingguy.nginx
+    - geerlingguy.mysql
+
+    # - darthwade.wordpress # I take forever!
 
   tasks:
     - include: "tasks/php.yml"
+    - include: "tasks/config_nginx.yml"
+    - include: "tasks/wp_config.yml"
+
+  handlers:
+    - name: "copy php.ini"
+      copy:
+        src: "files/fpm-php.ini"
+        dest: "/etc/php/7.0/fpm/php.ini"
+        mode: 644
+        owner: root
+        group: root
+
+    - name: restart php
+      service:
+        name: php7.0-fpm
+        state: restarted
+
+    - name: ensure nginx config file is ok
+      command: nginx -t
+
+    - name: restart nginx
+      command: systemctl reload nginx
