@@ -12,7 +12,7 @@
     wp_db_password: "{{wp['pw']}}"
     wp_db_host: localhost
 
-    nginx_vhosts: []
+    nginx_vhosts: []  # TODO
 
     mysql_root_password: "{{mysql_root_pass}}"
     mysql_databases:
@@ -28,16 +28,24 @@
         password: "{{unify['pw']}}"
         priv: "{{ unify['db'] + '.*:ALL'}}"
 
+    rbenv:
+      # env: "{{lookup('env','USER')}}"
+      default_ruby: "{{ruby['version']}}"
+      rubies:
+      - version: "{{ruby['version']}}"
+        env:
+          RUBY_CONFIGURE_OPTS: "--enable-shared"
   roles:
-    - geerlingguy.nginx
-    - geerlingguy.mysql
-
+    # - geerlingguy.nginx
+    # - geerlingguy.mysql
+      # - zzet.rbenv
     # - darthwade.wordpress # I take forever!
 
   tasks:
-    - include: "tasks/php.yml"
-    - include: "tasks/config_nginx.yml"
-    - include: "tasks/wp_config.yml"
+    # - include: "tasks/php.yml"
+    # - include: "tasks/config_nginx.yml"
+    # - include: "tasks/wp_config.yml"
+      - include: "tasks/ruby.yml"
 
   handlers:
     - name: "copy php.ini"
