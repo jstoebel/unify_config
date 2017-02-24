@@ -1,76 +1,85 @@
 ---
 
-- name: Install ruby dependencies
+- name: ensure bundler is installed
+  gem:
+    name: bundler
+    state: present
+    include_doc: no
+    executable: "/home/{{user_name}}/.rbenv/shims/gem"
+
+- name: Add nodejs official repository
+  shell: "curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -"
+
+- name: Ensure nodejs is installed
   apt:
-    name: "{{item}}"
+    name: nodejs
     state: installed
     update_cache: yes
 
-  with_items:
-    - git-core
-    - curl
-    - zlib1g-dev
-    - build-essential
-    - libssl-dev
-    - libreadline-dev
-    - libyaml-dev
-    - libsqlite3-dev
-    - sqlite3
-    - libxml2-dev
-    - libxslt1-dev
-    - libcurl4-openssl-dev
-    - python-software-properties
-    - libffi-dev
-    - nodejs
+- name: ensure rails is installed
+  gem:
+    name: rails
+    version: "{{ruby.rails_version}}"
+    include_doc: no
+    executable: "/home/{{user_name}}/.rbenv/shims/gem"
+  notify: rbenv rehash
 
-- name: git clone rbenv
-  git:
-    repo: https://github.com/rbenv/rbenv.git
-    dest: ~/.rbenv
-    clone: yes
-
-- name: 'add rbenv path and rbenv init to .bashrc'
-  lineinfile:
-    dest: "~/.bashrc"
-    line: "{{item}}"
-  with_items:
-    - 'export PATH="$HOME/.rbenv/bin:$PATH"'
-    - "'eval \"$(rbenv init -)\"' >> ~/.bashrc"
-
-- name: "exec $SHELL"
-  command: "exec $SHELL"
-
-- name: 'git clone ruby_build'
-  git:
-    repo: https://github.com/rbenv/ruby-build.git
-    dest: ~/.rbenv/plugins/ruby-build
-    clone: yes
-
-- name: add ruby-build path to bashrc
-  lineinfile:
-    dest: "~/.bashrc"
-    line: 'export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"'
-
-- name: "exec $SHELL"
-  command: "exec $SHELL"
-
-- name: install ruby
-  command: "rbenv install {{ruby['version']}}"
-
-- name: make ruby version global
-  command: "rbenv global {{ruby['version']}}"
-
-# - name: Install rbenv
-#   command: "{{item}}"
+# - name: Install ruby dependencies
+#   apt:
+#     name: "{{item}}"
+#     state: installed
+#     update_cache: yes
+#
 #   with_items:
-#     - "git clone https://github.com/rbenv/rbenv.git ~/.rbenv"
-#     - "echo 'export PATH=\"$HOME/.rbenv/bin:$PATH\"' >> ~/.bashrc"
-#     - "echo 'eval \"$(rbenv init -)\"' >> ~/.bashrc"
-#     - "exec $SHELL"
+#     - git-core
+#     - curl
+#     - zlib1g-dev
+#     - build-essential
+#     - libssl-dev
+#     - libreadline-dev
+#     - libyaml-dev
+#     - libsqlite3-dev
+#     - sqlite3
+#     - libxml2-dev
+#     - libxslt1-dev
+#     - libcurl4-openssl-dev
+#     - python-software-properties
+#     - libffi-dev
+#     - nodejs
 #
-#     - "git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build"
-#     - "echo 'export PATH=\"$HOME/.rbenv/plugins/ruby-build/bin:$PATH\"' >> ~/.bashrc"
-#     - "exec $SHELL"
+# - name: git clone rbenv
+#   git:
+#     repo: https://github.com/rbenv/rbenv.git
+#     dest: ~/.rbenv
+#     clone: yes
 #
-#     - "rbenv install 2.4.0"
-#     - "rbenv global 2.4.0"
+# - name: 'add rbenv path and rbenv init to .bashrc'
+#   lineinfile:
+#     dest: "~/.bashrc"
+#     line: "{{item}}"
+#   with_items:
+#     - 'export PATH="$HOME/.rbenv/bin:$PATH"'
+#     - "'eval \"$(rbenv init -)\"' >> ~/.bashrc"
+#
+# - name: "exec $SHELL"
+#   shell: 'bash -lc "exec $SHELL"'
+#
+# - name: 'git clone ruby_build'
+#   git:
+#     repo: https://github.com/rbenv/ruby-build.git
+#     dest: ~/.rbenv/plugins/ruby-build
+#     clone: yes
+#
+# - name: add ruby-build path to bashrc
+#   lineinfile:
+#     dest: "~/.bashrc"
+#     line: 'export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"'
+#
+# - name: "exec $SHELL"
+#   shell: 'bash -lc "exec $SHELL"'
+#
+# - name: install ruby
+#   command: "rbenv install {{ruby['version']}}"
+#
+# - name: make ruby version global
+#   command: "rbenv global {{ruby['version']}}"

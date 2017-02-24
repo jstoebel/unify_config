@@ -1,0 +1,25 @@
+---
+
+- name: add passenger key server
+  command: "apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7"
+
+- name: install apt-transport-https and ca-certificates
+  apt:
+    name: "{{item}}"
+    state: installed
+    update_cache: yes
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+
+- name: add passenger apt directory
+  shell: 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger xenial main > /etc/apt/sources.list.d/passenger.list'
+
+- name: Ensure Passgener + Nginx is install
+  apt:
+    name: "{{item}}"
+    state: installed
+    update_cache: yes
+  with_items:
+    - nginx-extras
+    - passenger

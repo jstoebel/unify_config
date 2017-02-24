@@ -5,6 +5,8 @@
     - vars/main.yml
   vars:
 
+    user_name: "{{lookup('env','USER')}}"
+
     wp_version: 4.0
     wp_install_dir: "{{wp['root_dir']}}"
     wp_db_name: "{{wp['db']}}"
@@ -28,24 +30,35 @@
         password: "{{unify['pw']}}"
         priv: "{{ unify['db'] + '.*:ALL'}}"
 
+    # rbenv:
+    #   env: user
+    #   default_ruby: "{{ruby['version']}}"
+    #   rubies:
+    #   - version: "{{ruby['version']}}"
+    #     env:
+    #       RUBY_CONFIGURE_OPTS: "--enable-shared"
     rbenv:
-      # env: "{{lookup('env','USER')}}"
-      default_ruby: "{{ruby['version']}}"
+      env: user
+      version: v0.4.0
+      default_ruby: "{{ruby.ruby_version}}"
       rubies:
-      - version: "{{ruby['version']}}"
+      - version: "{{ruby.ruby_version}}"
         env:
           RUBY_CONFIGURE_OPTS: "--enable-shared"
+
   roles:
-    # - geerlingguy.nginx
-    # - geerlingguy.mysql
-      # - zzet.rbenv
-    # - darthwade.wordpress # I take forever!
+    # - role: geerlingguy.nginx
+    # - role: geerlingguy.mysql
+    # - role: zzet.rbenv
+    #   rbenv_users:
+    #     - "{{lookup('env','USER')}}"
+    # - role: darthwade.wordpress # I take forever!
 
   tasks:
     # - include: "tasks/php.yml"
     # - include: "tasks/config_nginx.yml"
     # - include: "tasks/wp_config.yml"
-      - include: "tasks/ruby.yml"
+    - include: "tasks/ruby.yml"
 
   handlers:
     - name: "copy php.ini"
@@ -66,3 +79,6 @@
 
     - name: restart nginx
       command: systemctl reload nginx
+
+    - name: rbenv rehash
+      shell: rbenv rehash
