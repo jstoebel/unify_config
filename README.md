@@ -11,11 +11,15 @@ Some of this code comes from https://sysadmincasts.com/episodes/45-learning-ansi
  - Rails project
     - nginx
     - mysql
-    - rbenv
+    - rvm
  - Letsencrypt
 
 As of February, 2017, we will be running things under a single Digital Ocean Droplet. If traffic requires it, we may need to move things to multiple machines behind a load balancer.
 s
+
+### update
+
+rbenv is proving trickey to do with ansible. let's try [this](https://galaxy.ansible.com/rvm_io/ruby/)
 
 
 ## Development Enviornment Setup

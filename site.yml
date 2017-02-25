@@ -30,29 +30,15 @@
         password: "{{unify['pw']}}"
         priv: "{{ unify['db'] + '.*:ALL'}}"
 
-    # rbenv:
-    #   env: user
-    #   default_ruby: "{{ruby['version']}}"
-    #   rubies:
-    #   - version: "{{ruby['version']}}"
-    #     env:
-    #       RUBY_CONFIGURE_OPTS: "--enable-shared"
-    rbenv:
-      env: user
-      version: v0.4.0
-      default_ruby: "{{ruby.ruby_version}}"
-      rubies:
-      - version: "{{ruby.ruby_version}}"
-        env:
-          RUBY_CONFIGURE_OPTS: "--enable-shared"
-
   roles:
     # - role: geerlingguy.nginx
     # - role: geerlingguy.mysql
     # - role: zzet.rbenv
-    #   rbenv_users:
-    #     - "{{lookup('env','USER')}}"
-    # - role: darthwade.wordpress # I take forever!
+    - role: rvm_io.ruby
+      tags: ruby
+      rvm1_rubies:
+        - 'ruby-{{ruby.ruby_version}}'
+      rvm1_user: "{{user_name}}"
 
   tasks:
     # - include: "tasks/php.yml"
@@ -74,11 +60,8 @@
         name: php7.0-fpm
         state: restarted
 
-    - name: ensure nginx config file is ok
+    - name: test nginx config file
       command: nginx -t
 
     - name: restart nginx
       command: systemctl reload nginx
-
-    - name: rbenv rehash
-      shell: rbenv rehash

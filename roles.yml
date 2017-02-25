@@ -2,4 +2,4 @@
 - src: geerlingguy.nginx
 - src: geerlingguy.mysql
 - src: geerlingguy.php
-- src: zzet.rbenv
+- src: rvm_io.ruby
