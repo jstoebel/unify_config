@@ -1,13 +1,25 @@
 ---
-- name: copy nginx config
+- name: copy nginx config file
+  copy:
+    src: "files/nginx_conf"
+    dest: "/etc/nginx/nginx.conf"
+
+  notify:
+    - test nginx config file
+    - restart nginx
+
+- name: install server blocks
 
   template:
-    src: templates/nginx_default.j2
-    dest: "/etc/nginx/sites-available/default"
+    src: templates/{{item}}.j2
+    dest: "/etc/nginx/sites-enabled/{{item}}"
     mode: 644
     owner: root
     group: root
+  with_items:
+    - default
+    - rails_app
 
   notify:
-    - ensure nginx config file is ok
+    - test nginx config file
     - restart nginx

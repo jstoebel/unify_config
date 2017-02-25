@@ -13,11 +13,20 @@
 - name: group write access to the wp-content directory
   command: chmod g+w /{{wp['root_dir']}}/wp-content
 
-- name: give the web server write access to themes and plugins
-  command: chmod -R g+w /{{wp['root_dir']}}/wp-content/{{item}}
+- name: make themes and plugins directories in wp-content
+  file:
+    path: /{{wp['root_dir']}}/wp-content/{{item}}
+    state: directory
+    mode: "g+w"
   with_items:
     - themes
     - plugins
+
+# - name: give the web server write access to themes and plugins
+#   command: chmod -R g+w /{{wp['root_dir']}}/wp-content/{{item}}
+#   with_items:
+#     - themes
+#     - plugins
 
 - name: set FS_METHOD
   lineinfile:

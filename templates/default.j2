@@ -27,4 +27,16 @@ server {
         expires max;
         log_not_found off;
     }
+
+    location /donate {
+
+      # Tell Nginx and Passenger where your app's 'public' directory is
+      root /home/{{user_name}}/unify/public;
+
+      # Turn on Passenger
+      passenger_enabled on;
+      passenger_ruby /home/{{user_name}}/.rvm/gems/ruby-{{ruby.ruby_version}}/wrappers/ruby;
+
+    }
+
 }

@@ -21,6 +21,7 @@
     - python-software-properties
     - libffi-dev
     - nodejs
+    - libmysqlclient-dev
 
 - name: Add nodejs official repository
   shell: "curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -"
@@ -30,3 +31,10 @@
     name: nodejs
     state: installed
     update_cache: yes
+
+# FIX ME!
+# - name: Ensure mysql2 gem is installed
+#   gem:
+#     name: mysql2
+#     version: 0.4.5
+#     state: present

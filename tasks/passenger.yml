@@ -15,7 +15,7 @@
 - name: add passenger apt directory
   shell: 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger xenial main > /etc/apt/sources.list.d/passenger.list'
 
-- name: Ensure Passgener + Nginx is install
+- name: Ensure Passgener + Nginx is installed
   apt:
     name: "{{item}}"
     state: installed
