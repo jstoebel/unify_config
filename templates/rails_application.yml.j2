@@ -2,16 +2,16 @@
 # example of template that becomes .env file in rails app
 ASSET_HOST: localhost:3000
 APPLICATION_HOST: localhost:3000
-PORT: 3000
+PORT: "3000"
 RACK_ENV: production
-RACK_MINI_PROFILER: 0
+RACK_MINI_PROFILER: "0"
 SECRET_KEY_BASE: {{unify.secret_key}}
 EXECJS_RUNTIME: Node
 SMTP_ADDRESS: {{unify.smtp.address}}
 SMTP_DOMAIN: {{unify.smtp.domain}}
 SMTP_PASSWORD: {{unify.smtp.password}}
 SMTP_USERNAME: {{unify.smtp.username}}
-WEB_CONCURRENCY: 1
+WEB_CONCURRENCY: "1"
 
 UNIFY_DB_USERNAME: {{unify.pw}}
 

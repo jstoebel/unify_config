@@ -11,14 +11,11 @@
 - name: install server blocks
 
   template:
-    src: templates/{{item}}.j2
-    dest: "/etc/nginx/sites-enabled/{{item}}"
+    src: templates/default.j2
+    dest: "/etc/nginx/sites-enabled/default"
     mode: 644
     owner: root
     group: root
-  with_items:
-    - default
-    - rails_app
 
   notify:
     - test nginx config file
