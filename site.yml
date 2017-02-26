@@ -31,21 +31,21 @@
         priv: "{{ unify['db'] + '.*:ALL'}}"
 
   roles:
-    - role: geerlingguy.nginx
-    - role: geerlingguy.mysql
-    - role: darthwade.wordpress
-    - role: rvm_io.ruby
-      tags: ruby
-      rvm1_rubies:
-        - 'ruby-{{ruby.ruby_version}}'
-      rvm1_user: "{{user_name}}"
+    # - role: geerlingguy.nginx
+    # - role: geerlingguy.mysql
+    # - role: darthwade.wordpress
+    # - role: rvm_io.ruby
+    #   tags: ruby
+    #   rvm1_rubies:
+    #     - 'ruby-{{ruby.ruby_version}}'
+    #   rvm1_user: "{{user_name}}"
 
   tasks:
-    - include: "tasks/php.yml"
-    - include: "tasks/ruby.yml"
-    - include: "tasks/passenger.yml"
+    # - include: "tasks/php.yml"
+    # - include: "tasks/ruby.yml"
+    # - include: "tasks/passenger.yml"
     - include: "tasks/config_nginx.yml"
-    - include: "tasks/wp_config.yml"
+    # - include: "tasks/wp_config.yml"
     - include: "tasks/rails_app_setup.yml"
 
   handlers:

@@ -5,6 +5,8 @@ server {
     root {{wp['root_dir']}};
     index index.php index.html index.htm index.nginx-debian.html;
 
+    passenger_enabled on;
+
     server_name {{ ansible_enp0s8['ipv4']['address'] }};
 
     location / {
@@ -28,15 +30,23 @@ server {
         log_not_found off;
     }
 
-    location /donate {
+    location ~ ^/donate(/.*|$) {
+        alias /home/{{user_name}}/unify/public$1;  # <-- be sure to point to 'public'!
+        passenger_base_uri /donate;
+        passenger_app_root /home/{{user_name}}/unify;
+        passenger_document_root /home/{{user_name}}/unify/public;
+        passenger_enabled on;
 
-      # Tell Nginx and Passenger where your app's 'public' directory is
-      root /home/{{user_name}}/unify;
+        location ~ ^/assets/ {
+            expires 1y;
+            add_header Cache-Control public;
 
-      # Turn on Passenger
-      passenger_enabled on;
-      passenger_ruby /home/{{user_name}}/.rvm/gems/ruby-{{ruby.ruby_version}}/wrappers/ruby;
+            add_header ETag "";
+            break;
+        }
 
     }
+
+
 
 }
