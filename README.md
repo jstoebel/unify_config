@@ -21,6 +21,53 @@ s
 
 rbenv is proving trickey to do with ansible. let's try [this](https://galaxy.ansible.com/rvm_io/ruby/)
 
+### difference between provisioning and deployment
+
+not sure which of the following qualify as which.
+
+ - moving .env file (we want a single source of truth of these files)
+    - yes this will be needed by capistrano
+
+ - capistrano set up
+    - see below
+ - run bundle install
+    - capistrano will run this for every deploy. forget it.
+  - set up admin user for app:
+    - this is truly a one time task. even if we add new web servers we don't need to add new admin users
+
+### handling `.env`
+
+ - we want all secrets to be stashed in `.env` file.
+ - but this file isn't being loaded in prod per instructions of the gem author. why?
+ - Can I use dotenv in production?
+
+ - when I load the envs in `/etc/environment` why can't rails see them:
+    - nginx was started by not as a child process of bash. therefore those envs were not available.
+    - instead lets use figaro. envs will be loaded at app run time.
+
+dotenv was originally created to load configuration variables into ENV in development. There are typically better ways to manage configuration in production environments - such as /etc/environment managed by Puppet or Chef, heroku config, etc.
+
+I'm going to use figaro instead
+
+ - after adding `application.yml` my browser says Corrupted Content Error
+
+ - why isn't passenger starting:
+
+App 942 stdout: 
+App 942 stderr: WARNING: Use strings for Figaro configuration. 3000 was converted to "3000".
+App 942 stderr:
+App 942 stderr: WARNING: Skipping key "RACK_ENV". Already set in ENV.
+App 942 stderr:
+App 942 stderr: WARNING: Use strings for Figaro configuration. 0 was converted to "0".
+App 942 stderr:
+App 942 stderr: WARNING: Use strings for Figaro configuration. 1 was converted to "1".
+App 942 stderr:
+App 942 stdout: ** [Honeybadger] Unable to start Honeybadger -- api_key is missing or invalid. level=2 pid=942
+App 942 stdout: [SKYLIGHT] [1.0.1] Unable to start, see the Skylight logs for more details
+App 1053 stdout:
+App 1053 stdout: source=rack-timeout id=0760da6eea2ed26c80b0530cdf406c5b timeout=10000ms state=ready
+App 1053 stdout: [72b1cc95-9afb-485a-90d0-381d2de972e6] Started GET "/donate" for 10.0.2.2 at 2017-02-26 13:14:10 +0000
+App 1053 stdout: source=rack-timeout id=0760da6eea2ed26c80b0530cdf406c5b timeout=10000ms service=8ms state=completed
 
 ## Development Enviornment Setup
 
@@ -30,7 +77,9 @@ As of February, 2017, the ubuntu/xenial64 box is not useable. see [here](https:/
  - ssh into `mgmt`: `vagrant ssh`
  - symlink to /vagrant which points to `~` in host machine `ln -s /vagrant ~`
  - create `ansible.cfg` and `production` (inventory file) in home directory (see examples)
- - create vars: `mv vars/main.yml.example vars/main.yml`
+ - create files that were `.gitignore`d
+    - create vars: `mv vars/main.yml.example vars/main.yml`
+    - create `.env` file template for rails app
  - load all hosts into known_hosts: `ssh-keyscan web1 >> .ssh/known_hosts`
  - generate an ssh key: `ssh-keygen -t rsa -b 2048`
  - `cd vagrant`

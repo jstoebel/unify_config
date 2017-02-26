@@ -3,3 +3,4 @@ production
 /.vagrant
 /playbooks/*.retry
 *.retry
+/templates/rails_secrets.j2

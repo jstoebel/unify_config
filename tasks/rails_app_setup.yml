@@ -1,0 +1,37 @@
+---
+  - name: Ensure git is installed
+    apt:
+      name: git
+      state: installed
+      update_cache: yes
+
+  - name: Ensure app variables are in place
+    template:
+      src: "./templates/rails_application.yml.j2"
+      dest: "/home/{{user_name}}/unify/config/application.yml"
+    notify:
+      - restart nginx
+  # - name: ensure app variables are linked
+  #   lineinfile:
+  #     dest: "/etc/environment"
+  #     line: "source ./.unify_secrets"
+  #   notify:
+  #     - restart nginx
+
+
+
+  # TODO: we were only trying to get a working rails app to test passenger.
+  # i don't think we need to bundle install as a provision step
+
+  # - name: install gems
+  #   bundler:
+  #     chdir: /home/{{user_name}}/unify
+  #     state: present
+  #     executable: "/home/{{user_name}}/.rvm/gems/ruby-{{ruby.ruby_version}}/bin/bundle"
+
+  # - set_fact:
+  #    r: "{{ 100 | random }}"
+  #  run_once: yes
+
+# make file strucutre? What does capistrano expect?
+# move .env
