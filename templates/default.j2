@@ -6,7 +6,7 @@ server {
     index index.php index.html index.htm index.nginx-debian.html;
 
     passenger_enabled on;
-
+    passenger_app_env production;
     server_name {{ ansible_enp0s8['ipv4']['address'] }};
 
     location / {
@@ -25,28 +25,22 @@ server {
 
     location = /favicon.ico { log_not_found off; access_log off; }
     location = /robots.txt { log_not_found off; access_log off; allow all; }
-    location ~* \.(css|gif|ico|jpeg|jpg|js|png)$ {
-        expires max;
-        log_not_found off;
-    }
 
-    location ~ ^/donate(/.*|$) {
+    location ~ ^/h20-initiative(/.*|$) {
         alias /home/{{user_name}}/unify/public$1;  # <-- be sure to point to 'public'!
-        passenger_base_uri /donate;
+        passenger_base_uri /h20-initiative;
         passenger_app_root /home/{{user_name}}/unify;
         passenger_document_root /home/{{user_name}}/unify/public;
         passenger_enabled on;
 
-        location ~ ^/assets/ {
-            expires 1y;
-            add_header Cache-Control public;
-
-            add_header ETag "";
-            break;
-        }
-
     }
 
+    location ~ ^/assets/ {
+        expires 1y;
+        add_header Cache-Control public;
 
+        add_header ETag "";
+        break;
+    }
 
 }

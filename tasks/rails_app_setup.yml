@@ -5,12 +5,36 @@
       state: installed
       update_cache: yes
 
+  - name: Ensure app is cloned
+    git:
+      clone: yes
+      dest: "/home/{{user_name}}/unify"
+      # TODO: change to ssh
+      repo: https://github.com/jstoebel/unify.git
+    notify:
+      - restart nginx
+
+  - name: Ensure user owns repo
+    file:
+      path: "/home/{{user_name}}/unify"
+      owner: "{{user_name}}"
+      group: www-data
+      recurse: yes
+    notify:
+      - restart nginx
+
   - name: Ensure app variables are in place
     template:
       src: "./templates/rails_application.yml.j2"
       dest: "/home/{{user_name}}/unify/config/application.yml"
     notify:
       - restart nginx
+
+  - name: Ensure app gems are installed
+    bundler:
+      chdir: "/home/{{user_name}}/unify"
+      state: present
+      executable: "/home/vagrant/.rvm/gems/ruby-2.3.1/bin"
   # - name: ensure app variables are linked
   #   lineinfile:
   #     dest: "/etc/environment"
