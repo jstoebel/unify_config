@@ -5,57 +5,21 @@
       state: installed
       update_cache: yes
 
-  - name: Ensure app is cloned
-    git:
-      clone: yes
-      dest: "/home/{{user_name}}/unify"
-      # TODO: change to ssh
-      repo: https://github.com/jstoebel/unify.git
-    notify:
-      - restart nginx
-
-  - name: Ensure user owns repo
+  - name: Ensure base and shared dir is created
     file:
-      path: "/home/{{user_name}}/unify"
+      path: "{{item}}"
       owner: "{{user_name}}"
       group: www-data
       recurse: yes
-    notify:
-      - restart nginx
+      state: directory
+    with_items:
+      - "/home/{{user_name}}/unify"
+      - "/home/{{user_name}}/unify/shared"
+      - "/home/{{user_name}}/unify/shared/config"
 
   - name: Ensure app variables are in place
     template:
       src: "./templates/rails_application.yml.j2"
-      dest: "/home/{{user_name}}/unify/config/application.yml"
+      dest: "/home/{{user_name}}/unify/shared/config/application.yml"
     notify:
       - restart nginx
-
-  - name: Ensure app gems are installed
-    bundler:
-      chdir: "/home/{{user_name}}/unify"
-      state: present
-      executable: "/home/vagrant/.rvm/gems/ruby-2.3.1/bin"
-  # - name: ensure app variables are linked
-  #   lineinfile:
-  #     dest: "/etc/environment"
-  #     line: "source ./.unify_secrets"
-  #   notify:
-  #     - restart nginx
-
-
-
-  # TODO: we were only trying to get a working rails app to test passenger.
-  # i don't think we need to bundle install as a provision step
-
-  # - name: install gems
-  #   bundler:
-  #     chdir: /home/{{user_name}}/unify
-  #     state: present
-  #     executable: "/home/{{user_name}}/.rvm/gems/ruby-{{ruby.ruby_version}}/bin/bundle"
-
-  # - set_fact:
-  #    r: "{{ 100 | random }}"
-  #  run_once: yes
-
-# make file strucutre? What does capistrano expect?
-# move .env

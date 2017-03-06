@@ -1,0 +1,46 @@
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/sites/unify_wordpress;
+    index index.php index.html index.htm index.nginx-debian.html;
+
+    passenger_enabled on;
+    passenger_app_env production;
+    server_name 10.0.15.11;
+
+    location / {
+        #try_files $uri $uri/ =404;
+        try_files $uri $uri/ /index.php$is_args$args;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php7.0-fpm.sock;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+
+    location = /favicon.ico { log_not_found off; access_log off; }
+    location = /robots.txt { log_not_found off; access_log off; allow all; }
+
+    location ~ ^/h20-initiative(/.*|$) {
+        alias /home/vagrant/unify/public$1;  # <-- be sure to point to 'public'!
+        passenger_base_uri /h20-initiative;
+        passenger_app_root /home/vagrant/unify;
+        passenger_document_root /home/vagrant/unify/public;
+        passenger_enabled on;
+
+    }
+
+    location ~ ^/assets/ {
+        expires 1y;
+        add_header Cache-Control public;
+
+        add_header ETag "";
+        break;
+    }
+
+}

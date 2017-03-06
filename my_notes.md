@@ -82,3 +82,13 @@ absolute links need to be fixed. `/donate` needs to change to `h20-initiative/do
 
 see this SO post
 http://stackoverflow.com/questions/42521316/rails-5-nginx-passenger-cant-serve-static-assets-404/42522041#42522041
+
+d3 responsivness
+
+ - the secret was in the ratio between width and scale
+ - too
+
+
+## still left to do:
+- backup --> Wordpress is ready for handoff to Jerry!
+- capistrano

@@ -19,43 +19,37 @@
     mysql_root_password: "{{mysql_root_pass}}"
     mysql_databases:
       - name: "{{wp['db']}}"
-      - name: "{{unify['db']}}"
+      - name: "{{hi['db']}}"
     mysql_users:
       - name: "{{wp['user']}}"
         host: "%"
         password: "{{wp['pw']}}"
         priv: "{{ wp['db'] + '.*:ALL'}}"
-      - name: "{{unify['user']}}"
+      - name: "{{hi['user']}}"
         host: "%"
-        password: "{{unify['pw']}}"
-        priv: "{{ unify['db'] + '.*:ALL'}}"
+        password: "{{hi['pw']}}"
+        priv: "{{ hi['db'] + '.*:ALL'}}"
 
-  # roles:
-  #   - role: geerlingguy.nginx
-  #   - role: geerlingguy.mysql
-  #   - role: darthwade.wordpress
-  #   - role: rvm_io.ruby
-  #     tags: ruby
-  #     rvm1_rubies:
-  #       - 'ruby-{{ruby.ruby_version}}'
-  #     rvm1_user: "{{user_name}}"
+  roles:
+    - role: geerlingguy.nginx
+    - role: geerlingguy.mysql
+    - role: darthwade.wordpress
+    - role: rvm_io.ruby
+      tags: ruby
+      rvm1_rubies:
+        - 'ruby-{{ruby.ruby_version}}'
+      rvm1_user: "{{user_name}}"
 
   tasks:
-    # - include: "tasks/php.yml"
-    # - include: "tasks/ruby.yml"
-    # - include: "tasks/passenger.yml"
-    # - include: "tasks/config_nginx.yml"
-    # - include: "tasks/wp_config.yml"
+    - include: "tasks/php.yml"
+    - include: "tasks/ruby.yml"
+    - include: "tasks/passenger.yml"
+    - include: "tasks/config_nginx.yml"
+    - include: "tasks/wp_config.yml"
     - include: "tasks/rails_app_setup.yml"
+    - include: "tasks/backup.yml"
 
   handlers:
-    - name: "copy php.ini"
-      copy:
-        src: "files/fpm-php.ini"
-        dest: "/etc/php/7.0/fpm/php.ini"
-        mode: 644
-        owner: root
-        group: root
 
     - name: restart php
       service:

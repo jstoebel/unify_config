@@ -4,10 +4,11 @@ wp:
   user: wp_user
   pw: wp_pass
 
-unify:
-  db: unify
-  user: unify_user
-  pw: unify_pass
+hi:
+  root_dir: "/home/{{user_name}}"
+  db: h20
+  user: h20_user
+  pw: h20_pass
   secret_key: secret_key
   smtp:
     address: smtp.example.com
@@ -15,8 +16,8 @@ unify:
     password: password
     username: username
   facebook:
-    id: fb_id
-    secret: fb_secret
+    id: 811403299011906
+    secret: 776d485ed40b3224fd5c105968760459
 
 mysql_root_pass: rootpass
 

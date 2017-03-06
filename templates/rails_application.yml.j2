@@ -5,15 +5,17 @@ APPLICATION_HOST: localhost:3000
 PORT: "3000"
 RACK_ENV: production
 RACK_MINI_PROFILER: "0"
-SECRET_KEY_BASE: {{unify.secret_key}}
+SECRET_KEY_BASE: {{hi.secret_key}}
 EXECJS_RUNTIME: Node
-SMTP_ADDRESS: {{unify.smtp.address}}
-SMTP_DOMAIN: {{unify.smtp.domain}}
-SMTP_PASSWORD: {{unify.smtp.password}}
-SMTP_USERNAME: {{unify.smtp.username}}
+SMTP_ADDRESS: {{hi.smtp.address}}
+SMTP_DOMAIN: {{hi.smtp.domain}}
+SMTP_PASSWORD: {{hi.smtp.password}}
+SMTP_USERNAME: {{hi.smtp.username}}
 WEB_CONCURRENCY: "1"
 
-UNIFY_DB_USERNAME: {{unify.pw}}
+HI_DB_PASSWORD: {{hi.pw}}
 
-FB_ID: {{unify.facebook.id}}
-FB_SECRET: {{unify.facebook.secret}}
+FB_ID: {{hi.facebook.id}}
+FB_SECRET: {{hi.facebook.secret}}
+
+BASE_URL: "/h20-initiative"

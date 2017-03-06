@@ -17,5 +17,12 @@
     - php-xmlrpc
 
   notify:
-    - "copy php.ini"
     - restart php
+
+- name: "copy php.ini"
+  copy:
+    src: "files/fpm-php.ini"
+    dest: "/etc/php/7.0/fpm/php.ini"
+    mode: 644
+    owner: root
+    group: root

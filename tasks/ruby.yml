@@ -31,10 +31,3 @@
     name: nodejs
     state: installed
     update_cache: yes
-
-# FIX ME!
-# - name: Ensure mysql2 gem is installed
-#   gem:
-#     name: mysql2
-#     version: 0.4.5
-#     state: present

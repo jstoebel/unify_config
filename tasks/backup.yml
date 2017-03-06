@@ -1,0 +1,8 @@
+---
+- name: Ensure backup gem is installed
+  command: 'bash -lc "gem install backup"'
+  become: no
+
+# copy backup config file
+
+# set cron job
