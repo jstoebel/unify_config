@@ -4,5 +4,26 @@
   become: no
 
 # copy backup config file
+- name: Create backup file structure
+  file:
+    path: "{{item}}"
+    owner: "{{user_name}}"
+    group: www-data
+    recurse: yes
+    state: directory
+  with_items:
+    - "/home/{{user_name}}/Backup"
+    - "/home/{{user_name}}/Backup/unify/models"
+
+- name: Move backup model
+  template:
+    src: templates/{{item}}.rb.j2
+    dest: "/home/{{user_name}}/unify/{{item}}.rb"
+    mode: 700
+  with_items:
+    - "Backup/config"
+    - "Backup/models/unify"
+
+# first time dropbox
 
 # set cron job
