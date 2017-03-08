@@ -1,7 +1,7 @@
 ---
-- name: Ensure backup gem is installed
-  command: 'bash -lc "gem install backup"'
-  become: no
+# - name: Ensure backup gem is installed
+#   command: 'bash -lc "gem install backup"'
+#   become: no
 
 # copy backup config file
 - name: Create backup file structure
@@ -9,21 +9,29 @@
     path: "{{item}}"
     owner: "{{user_name}}"
     group: www-data
+    mode: 0700
     recurse: yes
     state: directory
   with_items:
     - "/home/{{user_name}}/Backup"
-    - "/home/{{user_name}}/Backup/unify/models"
+    - "/home/{{user_name}}/Backup/models"
 
-- name: Move backup model
+- name: Move config and model
   template:
     src: templates/{{item}}.rb.j2
-    dest: "/home/{{user_name}}/unify/{{item}}.rb"
-    mode: 700
+    dest: "/home/{{user_name}}/{{item}}.rb"
+    owner: "{{user_name}}"
+    group: www-data
+    mode: 0700
   with_items:
     - "Backup/config"
     - "Backup/models/unify"
 
-# first time dropbox
+- name: Check backup config
+  command: 'bash -lc "backup check"'
+  become: no
 
+- name: Perform first backup
+  command: 'bash -lc "backup perform --trigger unify --config-file /home/{{user_name}}/Backup/config.rb"'
+  become: no
 # set cron job

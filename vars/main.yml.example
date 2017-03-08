@@ -16,11 +16,22 @@ hi:
     password: password
     username: username
   facebook:
-    id: 811403299011906
-    secret: 776d485ed40b3224fd5c105968760459
+    id: 123
+    secret: 456
 
 mysql_root_pass: rootpass
 
 ruby:
   ruby_version: 2.3.1
   rails_version: 5.0.1
+
+dropbox:
+  api_key: 123
+  api_secret: 456
+  email:
+
+email:
+  address: someone@nowhere.com
+  password: 123456
+  domain: nowhere.com
+  user: jacob@mttechmedia.com
