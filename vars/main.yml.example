@@ -25,11 +25,11 @@ ruby:
   ruby_version: 2.3.1
   rails_version: 5.0.1
 
-  s3:
-    key_id: "key_id"
-    key: "key"
-    region: "us-east-1"
-    bucket: "some-bucket"
+s3:
+  key_id: "key_id"
+  key: "key"
+  region: "us-east-1"
+  bucket: "some-bucket"
 
 slack:
   webhook: "https://hooks.slack.com/services/bunchofletters"
