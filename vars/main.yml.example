@@ -5,7 +5,7 @@ wp:
   pw: wp_pass
 
 hi:
-  root_dir: "/home/{{user_name}}"
+  root_dir: "/home/{{user_name}}/unify/shared"
   db: h20
   user: h20_user
   pw: h20_pass
