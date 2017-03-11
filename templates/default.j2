@@ -7,7 +7,7 @@ server {
 
     passenger_enabled on;
     passenger_app_env production;
-    server_name {{ ansible_enp0s8['ipv4']['address'] }};
+    server_name {{ ansible_eth0["ipv4"]["address"] }};
 
     location / {
         #try_files $uri $uri/ =404;

@@ -5,3 +5,4 @@ production
 *.retry
 /templates/rails_secrets.j2
 /vars/main.yml
+/files/Backup/.cache/**/*

@@ -1,7 +1,7 @@
 ---
-# - name: Ensure backup gem is installed
-#   command: 'bash -lc "gem install backup"'
-#   become: no
+- name: Ensure backup gem is installed
+  command: 'bash -lc "gem install backup"'
+  become: no
 
 # copy backup config file
 - name: Create backup file structure
@@ -15,6 +15,7 @@
   with_items:
     - "/home/{{user_name}}/Backup"
     - "/home/{{user_name}}/Backup/models"
+    - "/home/{{user_name}}/Backup/.cache"
 
 - name: Move config and model
   template:
@@ -27,11 +28,31 @@
     - "Backup/config"
     - "Backup/models/unify"
 
+- name: Move backup_start.sh
+  template:
+    src: templates/Backup/backup_start.sh.j2
+    dest: "/home/{{user_name}}/Backup/backup_start.sh"
+    owner: "{{user_name}}"
+    group: www-data
+    mode: 0700
+
+- name: Move dropbox cache file
+  copy:
+    src: "templates/Backup/.cache/{{dropbox.oauth_key}}"
+    dest: "/home/{{user_name}}/Backup/.cache/{{dropbox.oauth_key}}"
+    owner: "{{user_name}}"
+    group: www-data
+    mode: 0700
+
 - name: Check backup config
   command: 'bash -lc "backup check"'
   become: no
 
-- name: Perform first backup
-  command: 'bash -lc "backup perform --trigger unify --config-file /home/{{user_name}}/Backup/config.rb"'
-  become: no
+- cron:
+    name: "nightly backup"
+    minute: "0"
+    hour: "3"
+    job: "/home/{{user_name}}/Backup/backup_start.sh >> /home/{{user_name}}/cronlog.log 2>&1"
+    user: "{{user_name}}"
+
 # set cron job

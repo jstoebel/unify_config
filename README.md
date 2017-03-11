@@ -41,7 +41,6 @@ As of February, 2017, the ubuntu/xenial64 box is not useable. see [here](https:/
  - non root user created with sudo permission
  - can ssh from local machine into Droplet
  - machine can git clone repo via ssh
+ - python 2!
 
- - rake tasks
-    - `db:seed`
-    - `create_admin`
+use this command to have ansible ask for sudo password `ansible-playbook site.yml --ask-become-pass`

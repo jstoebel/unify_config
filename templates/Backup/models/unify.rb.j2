@@ -1,35 +1,6 @@
-
-##
-# Backup Generated: my_backup
-# Once configured, you can run the backup with the following command:
-#
-# $ backup perform -t my_backup [-c <path_to_configuration_file>]
-#
-# For more information about Backup's components, see the documentation at:
-# http://backup.github.io/backup
-#
 Model.new(:unify, 'Backup for Unify Water site') do
-  ##
-  # Archive [Archive]
-  #
-  # Adding a file or directory (including sub-directories):
-  #   archive.add "/path/to/a/file.rb"
-  #   archive.add "/path/to/a/directory/"
-  #
-  # Excluding a file or directory (including sub-directories):
-  #   archive.exclude "/path/to/an/excluded_file.rb"
-  #   archive.exclude "/path/to/an/excluded_directory
-  #
-  # By default, relative paths will be relative to the directory
-  # where `backup perform` is executed, and they will be expanded
-  # to the root of the filesystem when added to the archive.
-  #
-  # If a `root` path is set, relative paths will be relative to the
-  # given `root` path and will not be expanded when added to the archive.
-  #
-  #   archive.root '/path/to/archive/root'
-  #
-  archive :my_archive do |archive|
+
+  archive :unify do |archive|
     # Run the `tar` command using `sudo`
     archive.use_sudo
     archive.add "{{wp.root_dir}}"  # wordpress
@@ -48,7 +19,7 @@ Model.new(:unify, 'Backup for Unify Water site') do
     db.password           = "{{wp.pw}}"
     db.host               = "localhost"
     db.port               = 3306
-    db.socket             = "/tmp/mysql.sock"
+    db.socket             = "/var/run/mysqld/mysqld.sock"
   end
 
   database MySQL, :rails do |db|
@@ -57,7 +28,7 @@ Model.new(:unify, 'Backup for Unify Water site') do
     db.password           = "{{hi.pw}}"
     db.host               = "localhost"
     db.port               = 3306
-    db.socket             = "/tmp/mysql.sock"
+    db.socket             = "/var/run/mysqld/mysqld.sock"
   end
 
   ##
@@ -95,26 +66,31 @@ Model.new(:unify, 'Backup for Unify Water site') do
   #
   compress_with Gzip
 
-  ##
-  # Mail [Notifier]
-  #
-  # The default delivery method for Mail Notifiers is 'SMTP'.
-  # See the documentation for other delivery options.
-  #
-  notify_by Mail do |mail|
-    mail.on_success           = true
-    mail.on_warning           = true
-    mail.on_failure           = true
+  notify_by Slack do |slack|
+    slack.on_success = true
+    slack.on_warning = true
+    slack.on_failure = true
 
-    mail.from                 = "{{email.address}}"
-    mail.to                   = "{{email.address}}"
-    mail.address              = "smtp.gmail.com"
-    mail.port                 = 587
-    mail.domain               = "{{email.domain}}"
-    mail.user_name            = "{{email.user}}"
-    mail.password             = "{{email.password}}"
-    mail.authentication       = "plain"
-    mail.encryption           = :starttls
+    # The integration token
+    slack.webhook_url = "{{slack.webhook}}"
+
+    # The channel to which messages will be sent
+    # slack.channel = 'my_channel'
+    #
+    # The username to display along with the notification
+    # slack.username = 'my_username'
+    #
+    # The emoji icon to use for notifications.
+    # See http://www.emoji-cheat-sheet.com for a list of icons.
+    slack.icon_emoji = ':droplet:'
+    #
+    # Change default notifier message.
+    # See https://github.com/backup/backup/pull/698 for more information.
+    # slack.message = lambda do |model, data|
+    #   "[#{data[:status][:message]}] #{model.label} (#{model.trigger})"
+    # end
   end
+
+
 
 end

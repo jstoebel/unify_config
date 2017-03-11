@@ -28,10 +28,13 @@ ruby:
 dropbox:
   api_key: 123
   api_secret: 456
-  email:
+  oauth_key: n6af0ceitedmueh8hwoctry7puanse
 
 email:
   address: someone@nowhere.com
   password: 123456
   domain: nowhere.com
   user: jacob@mttechmedia.com
+
+slack:
+  webhook: "https://hooks.slack.com/services/bunchofletters"
