@@ -36,14 +36,6 @@
     group: www-data
     mode: 0700
 
-- name: Move dropbox cache file
-  copy:
-    src: "templates/Backup/.cache/{{dropbox.oauth_key}}"
-    dest: "/home/{{user_name}}/Backup/.cache/{{dropbox.oauth_key}}"
-    owner: "{{user_name}}"
-    group: www-data
-    mode: 0700
-
 - name: Check backup config
   command: 'bash -lc "backup check"'
   become: no
