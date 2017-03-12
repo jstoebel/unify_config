@@ -17,3 +17,11 @@
   apt:
     name: unattended-upgrades
     update_cache: yes
+
+- name: Ensure user is in www-data group
+  user:
+    name: "{{user_name}}" # currently assuming this user already exists!
+    groups: www-data
+    append: yes
+    state: present
+    update_password: on_create

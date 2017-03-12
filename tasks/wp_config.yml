@@ -22,11 +22,11 @@
     - themes
     - plugins
 
-# - name: give the web server write access to themes and plugins
-#   command: chmod -R g+w /{{wp['root_dir']}}/wp-content/{{item}}
-#   with_items:
-#     - themes
-#     - plugins
+- name: give the web server write access to themes and plugins
+  command: chmod -R 0770 /{{wp['root_dir']}}/wp-content/{{item}}
+  with_items:
+    - themes
+    - plugins
 
 - name: set FS_METHOD
   lineinfile:

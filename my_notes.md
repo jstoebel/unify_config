@@ -88,6 +88,22 @@ d3 responsivness
  - the secret was in the ratio between width and scale
  - too
 
+## users installing plugins
+
+ - user needed to be in group www-data in order create the proper directories
+ - www-data group needs rwx permission on uploads
+ - when uploading theme i think it wasn't able to unzip
+
+ - solution: directories in wp-content should have chmod 770. user running needs to belong to group www-data
+    - plugins
+    - themes
+    - upgrade
+    - uploads
+
+## ssh-ing into server for capistrano deploy
+ - needed to run `ssh-add -L`. not sure why I was able to manually ssh fine though
+
+
 
 ## still left to do:
 - backup --> Wordpress is ready for handoff to Jerry!
