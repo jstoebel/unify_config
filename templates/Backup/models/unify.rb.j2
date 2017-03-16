@@ -5,6 +5,7 @@ Model.new(:unify, 'Backup for Unify Water site') do
     archive.use_sudo
     archive.add "{{wp.root_dir}}"  # wordpress
     archive.add "{{hi.root_dir}}"  # rails app
+    archive.add "/var/log/nginx"   # nginx logs
 
     # archive.exclude "/path/to/a/excluded_file.rb"
   end
