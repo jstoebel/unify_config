@@ -103,8 +103,12 @@ d3 responsivness
 ## ssh-ing into server for capistrano deploy
  - needed to run `ssh-add -L`. not sure why I was able to manually ssh fine though
 
+# 502 bad gateway
 
+only getting it for wp-admin
 
-## still left to do:
-- backup --> Wordpress is ready for handoff to Jerry!
-- capistrano
+http://jvdc.me/fix-502-bad-gateway-error-on-nginx-server-after-upgrading-php/
+this is where php listens: `listen = /run/php/php7.0-fpm.sock`
+
+possible lead
+http://stackoverflow.com/questions/23844761/upstream-sent-too-big-header-while-reading-response-header-from-upstream

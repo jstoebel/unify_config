@@ -63,6 +63,13 @@ http {
   include /etc/nginx/passenger.conf;
 
   ##
+  # Buffering
+  ##
+
+  fastcgi_buffers 16 16k;
+  fastcgi_buffer_size 32k;
+
+  ##
   # Virtual Host Configs
   ##
 
