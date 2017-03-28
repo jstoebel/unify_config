@@ -1,0 +1,40 @@
+---
+
+- name: Create directory
+  file:
+    path: "/home/{{user_name}}/monitoring"
+    owner: "{{user_name}}"
+    mode: 0700
+    recurse: yes
+    state: directory
+
+- name: move files
+  template:
+    src: templates/monitoring/{{item}}.j2
+    dest: "/home/{{user_name}}/monitoring/{{item}}"
+    owner: "{{user_name}}"
+    mode: 0700
+  with_items:
+    - "main.py"
+    - "requirements.txt"
+    - "monitor_start.sh"
+
+- name: get virtualenv
+  apt:
+    name: virtualenv
+    state: installed
+    update_cache: yes
+
+- name: Spin up virtualenv with requirements
+  pip:
+    requirements: "/home/{{user_name}}/monitoring/requirements.txt"
+    virtualenv: "/home/{{user_name}}/.venvs"
+    virtualenv_python: "python3.5"
+
+- name: set cron job
+  cron:
+    name: "nightly server monitoring"
+    minute: "0"
+    hour: "3"
+    job: "/home/{{user_name}}/monitoring/monitor_start.sh >> /home/{{user_name}}/cronlog.log 2>&1"
+    user: "{{user_name}}"

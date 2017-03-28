@@ -22,11 +22,14 @@
     - themes
     - plugins
 
-- name: give the web server write access to themes and plugins
-  command: chmod -R 0770 /{{wp['root_dir']}}/wp-content/{{item}}
-  with_items:
-    - themes
-    - plugins
+- name: give www-data group full permission to wp file;
+  command: "find /{{wp['root_dir']}} -type f -exec chmod 770 {} \\;"
+  become: yes
+
+- name: give www-data group full permission to wp dirs
+  command: "find /{{wp['root_dir']}} -type d -exec chmod 770 {} \\;"
+  become: yes
+
 
 - name: set FS_METHOD
   lineinfile:

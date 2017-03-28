@@ -1,0 +1,42 @@
+import os
+
+import requests
+
+def check_urls():
+    """
+    check that both apps are responding
+    """
+    base_url = "https://www.unifywater.com{}"
+    paths = ['/', '/h20-initiative/']
+
+    urls = [base_url.format(path) for path in paths]
+
+    reports = []
+    for url in urls:
+        try:
+            requests.get(url)
+            reports.append(":white_check_mark: {} -> ok".format(url))
+        except:
+            reports.append(":x: {} -> FAILED".format(url))
+
+    return reports
+
+def server_need_restart():
+    """
+    see if file /var/run/reboot-required exists.
+    """
+
+    if (os.path.exists('/var/run/reboot-required')):
+        return ":recycle: server RESTART required"
+    else:
+        return ":thumbsup_all: server does not need to restart"
+
+def main():
+    results = check_urls()
+    results.append(server_need_restart())
+    report_str = '\n'.join(results)
+    payload = {"text": report_str}
+    requests.post("{{slack.webhook}}", json=payload)
+
+if __name__ == "__main__":
+    main()

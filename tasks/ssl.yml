@@ -1,0 +1,35 @@
+---
+- name: ensure snippets directory exists
+  file:
+    path: /etc/nginx/snippets
+    state: directory
+    mode: 0755
+
+- name: copy snippets
+  copy:
+    src: "files/{{item}}"
+    dest: "/etc/nginx/snippets/{{item}}"
+    mode: 0644
+    owner: root
+    group: root
+  with_items:
+    - "ssl-params.conf"
+    - "ssl-unifywater.com.conf"
+
+- name: set crontab to attempt to update ssl cert weekly
+  cron:
+    name: "weekly ssl update attempt"
+    minute: "30"
+    hour: "2"
+    weekday: "1"
+    job: sudo /usr/bin/letsencrypt renew >> /var/log/le-renew.log
+    user: "{{user_name}}"
+
+- name: set crontab to restart webserver after ssl update
+  cron:
+    name: "restart webserver after ssl update attempt"
+    minute: "35"
+    hour: "2"
+    weekday: "1"
+    job: "sudo /bin/systemctl reload nginx"
+    user: "{{user_name}}"

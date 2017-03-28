@@ -1,6 +1,5 @@
 ### my notes
 
-
 rbenv is proving trickey to do with ansible. let's try [this](https://galaxy.ansible.com/rvm_io/ruby/)
 
 ### difference between provisioning and deployment

@@ -1,3 +1,5 @@
+server_names: "unifywater.com www.unifywater.com"
+
 wp:
   root_dir: "/var/sites/unify_wordpress"
   db: wordpress
