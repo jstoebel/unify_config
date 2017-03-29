@@ -2,40 +2,84 @@ import os
 
 import requests
 
-def check_urls():
+class Notification:
     """
-    check that both apps are responding
-    """
-    base_url = "https://www.unifywater.com{}"
-    paths = ['/', '/h20-initiative/']
-
-    urls = [base_url.format(path) for path in paths]
-
-    reports = []
-    for url in urls:
-        try:
-            requests.get(url)
-            reports.append(":white_check_mark: {} -> ok".format(url))
-        except:
-            reports.append(":x: {} -> FAILED".format(url))
-
-    return reports
-
-def server_need_restart():
-    """
-    see if file /var/run/reboot-required exists.
+    a simple monitoring and slack notification object
     """
 
-    if (os.path.exists('/var/run/reboot-required')):
-        return ":recycle: server RESTART required"
-    else:
-        return ":thumbsup_all: server does not need to restart"
+    def __init__(self):
+        self.messages = []
+        self.ok = True
+        self.color = 'good'
+
+    def monitor(self):
+        """
+        check all sources and gather messages
+        """
+        self._check_urls()
+        self._server_need_restart()
+
+    def report(self):
+        """
+        return a string of all messages
+        """
+
+        return '\n'.join(self.messages)
+
+    def _check_urls(self):
+        """
+        check that both apps are responding
+        """
+        base_url = "https://www.unifywater.com{}"
+        paths = ['/', '/h20-initiative/']
+
+        urls = [base_url.format(path) for path in paths]
+
+        for url in urls:
+            try:
+                requests.get(url)
+                self._add_msg(':white_check_mark: {} -> ok'.format(url), True)
+            except:
+                self._add_msg(':x: {} -> FAILED'.format(url), False)
+
+    def _server_need_restart(self):
+        """
+        see if file /var/run/reboot-required exists.
+        """
+
+        if (os.path.exists('/var/run/reboot-required')):
+            self._add_msg(':recycle: server RESTART required', False)
+        else:
+            self._add_msg(':thumbsup_all: server does not need to restart', True)
+
+    def _add_msg(self, text, ok):
+        """
+        text (str): the message of the text
+        ok (bool): if the message is a good status or bad
+        """
+
+        self.messages.append(text)
+
+        # if a bad message comes in, switch status.
+        if self.ok and not ok:
+            self.ok = False
+            self.color = 'danger'
 
 def main():
-    results = check_urls()
-    results.append(server_need_restart())
-    report_str = '\n'.join(results)
-    payload = {"text": report_str}
+
+    notification = Notification()
+    notification.monitor()
+
+    payload = {
+        "attachments": [
+            {
+                "fallback": notification.report(),
+                "pretext": "Daily report from notifier",
+                "text": notification.report(),
+                "color": notification.color
+            }
+        ]
+    }
     requests.post("{{slack.webhook}}", json=payload)
 
 if __name__ == "__main__":

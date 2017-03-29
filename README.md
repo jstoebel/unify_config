@@ -9,7 +9,8 @@ The playbook will install the following
 
  - Wordpress (LEMP stack)
  - Rails environment (rvm, passenger)
- - Letsencrypt (TODO)
+ - Letsencrypt
+ - a simple monitoring/notification script
 
 As of February, 2017, we will be running things under a single Digital Ocean Droplet. If traffic requires it, we may need to move things to multiple machines behind a load balancer.
 
@@ -43,7 +44,8 @@ We'll need a better solution than this.
 We assume the following is in place before running the playbook in production
 
  - Droplet is created.
- - non root user created with password-less sudo permission
+ - non root user created with ~~password-less~~ sudo permission
  - can ssh from local machine into Droplet
  - machine can git clone repo via ssh
  - python 2!
+ - Initial setup for Letsencrypt
