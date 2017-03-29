@@ -6,13 +6,6 @@
     state: installed
     update_cache: yes
 
-- name: Ensure user may sudo without password
-  lineinfile:
-    dest: "/etc/sudoers"
-    state: present
-    regexp: '^%{{user_name}}'
-    line: '%{{user_name}} ALL=(ALL) NOPASSWD: ALL'
-
 - name: Ensure automatic updates
   apt:
     name: unattended-upgrades
