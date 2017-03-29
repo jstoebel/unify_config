@@ -52,7 +52,7 @@ server {
     location ~ ^/h20-initiative(/.*|$) {
         alias /home/{{user_name}}/unify/current/public$1;  # <-- be sure to point to 'public'!
         passenger_base_uri /h20-initiative;
-        passenger_app_root /home/{{user_name}}/current/unify;
+        passenger_app_root /home/{{user_name}}/unify/current;
         passenger_document_root /home/{{user_name}}/unify/current/public;
         passenger_enabled on;
 
